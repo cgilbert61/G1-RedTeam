@@ -1,0 +1,1682 @@
+<!-- Patent Pending: 64/138,999 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="patent" content="Patent Pending: 64/138,999">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XQBX6377YN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XQBX6377YN');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G1163RT Red Team Showcase & Activation</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030712;
+            --card-bg: rgba(15, 23, 42, 0.45);
+            --border-color: rgba(51, 65, 85, 0.45);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-rose: #f43f5e;
+            --accent-violet: #8b5cf6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+        }
+
+        header {
+            width: 100%;
+            max-width: 900px;
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            position: relative;
+            width: 2.75rem;
+            height: 2.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 2.75rem;
+            height: 2.75rem;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-icon:hover svg {
+            transform: scale(1.05);
+        }
+
+        .g1-pulse-dot {
+            position: absolute;
+            bottom: -1px;
+            right: -1px;
+            width: 0.6rem;
+            height: 0.6rem;
+            background-color: var(--accent-rose);
+            border-radius: 50%;
+            border: 2px solid var(--bg-color);
+            animation: pulse-dot-anim 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dot-anim {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        .title-text h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #fff 30%, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-text p {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 0.1rem;
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.15);
+            padding: 0.4rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-emerald);
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 0.4rem;
+            height: 0.4rem;
+            background: var(--accent-emerald);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-emerald);
+        }
+
+        main {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 1.5rem 3rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card-full {
+            width: 100%;
+        }
+
+        .card-header h2 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .card-header p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        /* Bullet feature grid */
+        .features-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .features-list {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .feature-item {
+            background: rgba(3, 7, 18, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .feature-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-dot {
+            width: 0.35rem;
+            height: 0.35rem;
+            border-radius: 50%;
+        }
+
+        .feature-desc {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        /* Buttons styles */
+        .btn-robust {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 0.65rem 1.25rem;
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .btn-robust:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(15, 23, 42, 0.95);
+            transform: translateY(-1px);
+        }
+
+        .btn-sub {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .btn-main {
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Pricing grid styles */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .price-box {
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            background: rgba(3, 7, 18, 0.6);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .price-box:hover {
+            border-color: rgba(6, 182, 212, 0.25);
+            background: rgba(3, 7, 18, 0.75);
+            transform: translateY(-1px);
+        }
+
+        .price-box.active {
+            border-color: rgba(6, 182, 212, 0.35);
+            background: rgba(6, 182, 212, 0.03);
+        }
+
+        .price-tag {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .price-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .price-value span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .price-features {
+            list-style: none;
+            padding-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .price-features li::before {
+            content: '• ';
+            color: var(--accent-cyan);
+            margin-right: 0.25rem;
+        }
+
+        .active-badge {
+            position: absolute;
+            top: -0.5rem;
+            right: 0.75rem;
+            background: var(--accent-cyan);
+            color: #030712;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Form styles */
+        .form-card {
+            background: rgba(3, 7, 18, 0.7);
+            border: 1px solid rgba(51, 65, 85, 0.3);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background-color: var(--accent-cyan);
+            box-shadow: 0 0 6px var(--accent-cyan);
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .input-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .input-item label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+        }
+
+        .input-item input {
+            background: #090d16;
+            border: 1px solid rgba(51, 65, 85, 0.6);
+            border-radius: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            outline: none;
+            width: 100%;
+        }
+
+        .btn-download {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-cyan), #3b82f6);
+            color: #030712;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(6, 182, 212, 0.3);
+            background: linear-gradient(135deg, #22d3ee, #2563eb);
+        }
+
+        /* Modals style */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-card {
+            background: rgba(15, 23, 42, 0.98);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            max-width: 650px;
+            width: 100%;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+        }
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-family: sans-serif;
+        }
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+        .modal-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+        .modal-close-btn:hover {
+            color: var(--text-primary);
+        }
+    
+        /* Slide Deck Modal styles */
+        .slide-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border-color);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .slide-dot.active {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 8px var(--accent-cyan);
+            transform: scale(1.25);
+        }
+        .slide-dot:hover {
+            background: var(--accent-cyan);
+            opacity: 0.8;
+        }
+        .slide {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            /* Stack Slide Grid columns on mobile */
+            .slide div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+
+            /* Adjust Presentation Modal slide body and text sizes */
+            #slides-modal .modal-card {
+                min-height: auto;
+                height: 85vh;
+            }
+
+            #slides-modal .modal-body {
+                padding: 1.25rem 1rem !important;
+                align-items: flex-start !important;
+            }
+
+            #slides-modal .slide h2 {
+                font-size: 1.15rem !important;
+            }
+
+            #slides-modal .slide p {
+                font-size: 0.75rem !important;
+            }
+
+            #slides-modal .slide ul {
+                font-size: 0.68rem !important;
+            }
+
+            #slides-modal .modal-footer {
+                padding: 0.75rem !important;
+            }
+
+            #slides-modal .modal-footer div[style*="margin: 0 1.5rem"] {
+                margin: 0 0.5rem !important;
+            }
+
+            .slide table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                width: 100%;
+            }
+        }
+</style>
+</head>
+<body>
+    <header>
+        <div class="logo-section">
+            <div class="logo-icon">
+                <svg viewBox="0 0 100 100">
+                    <defs>
+                        <linearGradient id="redteam-shield" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fda4af"/>
+                            <stop offset="50%" stop-color="#f43f5e"/>
+                            <stop offset="100%" stop-color="#9f1239"/>
+                        </linearGradient>
+                        <linearGradient id="redteam-g" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#e11d48"/>
+                            <stop offset="100%" stop-color="#9f1239"/>
+                        </linearGradient>
+                        <linearGradient id="redteam-one" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffe4e6"/>
+                            <stop offset="100%" stop-color="#fb7185"/>
+                        </linearGradient>
+                        <radialGradient id="redteam-glow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.15"/>
+                            <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#redteam-glow)"/>
+                    <path d="M 50 18 A 28 28 0 1 0 78 50 L 78 46 L 56 46 L 56 54 L 69 54 A 19 19 0 1 1 50 27" fill="url(#redteam-g)" stroke="#9f1239" stroke-width="0.5"/>
+                    <path d="M 45 32 L 53 32 L 53 66 L 45 66 Z" fill="url(#redteam-one)" stroke="#9f1239" stroke-width="0.5"/>
+                    <path d="M 45 32 L 37 38 L 41 43 L 45 38 Z" fill="url(#redteam-one)" stroke="#9f1239" stroke-width="0.5"/>
+                    <polygon points="50,12 80,26 80,62 50,88 20,62 20,26" fill="none" stroke="url(#redteam-shield)" stroke-width="2.5" stroke-linejoin="round"/>
+                    <polygon points="50,15 77,28 77,60 50,84 23,60 23,28" fill="none" stroke="url(#redteam-shield)" stroke-width="1" stroke-linejoin="round" stroke-opacity="0.5"/>
+                    <line x1="50" y1="12" x2="50" y2="22" stroke="url(#redteam-shield)" stroke-width="2"/>
+                    <line x1="20" y1="26" x2="32" y2="32" stroke="url(#redteam-shield)" stroke-width="2"/>
+                    <line x1="80" y1="26" x2="68" y2="32" stroke="url(#redteam-shield)" stroke-width="2"/>
+                    <line x1="20" y1="62" x2="32" y2="56" stroke="url(#redteam-shield)" stroke-width="2"/>
+                    <line x1="80" y1="62" x2="68" y2="56" stroke="url(#redteam-shield)" stroke-width="2"/>
+                    <line x1="50" y1="88" x2="50" y2="76" stroke="url(#redteam-shield)" stroke-width="2"/>
+                    <circle cx="50" cy="12" r="3.5" fill="#ffe4e6" stroke="#9f1239" stroke-width="1"/>
+                    <circle cx="80" cy="26" r="3.5" fill="#f43f5e" stroke="#9f1239" stroke-width="1"/>
+                    <circle cx="80" cy="62" r="3.5" fill="#f43f5e" stroke="#9f1239" stroke-width="1"/>
+                    <circle cx="50" cy="88" r="3.5" fill="#9f1239" stroke="#ffe4e6" stroke-width="1"/>
+                    <circle cx="20" cy="62" r="3.5" fill="#f43f5e" stroke="#9f1239" stroke-width="1"/>
+                    <circle cx="20" cy="26" r="3.5" fill="#ffe4e6" stroke="#9f1239" stroke-width="1"/>
+                </svg>
+                <div class="g1-pulse-dot"></div>
+            </div>
+            <div class="title-text">
+                <h1>G1163RT Red Team Showcase</h1>
+                <p>Independent Adversarial AI Risk & AI-SPM via Automated AI Red Teaming/Adversarial Probing/Fuzzing Platform</p>
+            </div>
+        </div>
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            <span>NIST AI RMF • ISO 42001 • EU AI Act • MITRE ATLAS Aligned</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- Product Overview -->
+        <section class="card">
+            <div class="card-header">
+                <h2>G1 Red-Team Engine for AI Gateway Testing</h2>
+                <p>Continuous compliance, multi-turn fuzzing, and model vulnerability verification</p>
+            </div>
+            
+            <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5;">
+                The G1 Red-Team Engine provides an independent, gateway-agnostic adversarial audit platform. Combine fast inline CI/CD assertion gates with deep, scheduled AI-SPM via Automated AI Red Teaming/Adversarial Probing/Fuzzing sweeps, protocol-level Model Context Protocol (MCP) evaluations, and continuous compliance verification—running 100% inside your private VPC.
+            </p>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem;">
+                <button onclick="openAlignmentModal()" class="btn-robust">
+                    <span class="btn-sub">Click here to view</span>
+                    <span class="btn-main">White Papers & Alignment</span>
+                </button>
+                <button onclick="openSlidesModal()" class="btn-robust">
+                    <span class="btn-sub">Click here to view</span>
+                    <span class="btn-main">G1 Platform Presentation Deck</span>
+                </button>
+                <button onclick="openFaqModal()" class="btn-robust">
+                    <span class="btn-sub">Click here to view</span>
+                    <span class="btn-main">Adversarial/FAQ</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Bullet point features grid -->
+        <section class="card">
+            <div class="card-header">
+                <h2>Core Platform Capabilities</h2>
+                <p>Comprehensive evaluations mapping models to global standards and taxonomies</p>
+            </div>
+
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="feature-title">
+                        <span class="feature-dot" style="background: var(--accent-rose);"></span>
+                        <span>PyRIT Multi-Turn Agentic Fuzzing</span>
+                    </div>
+                    <p class="feature-desc">Scheduled, out-of-band adversarial loops (1–15 turns) executing against staging or production gateways overnight to detect emergent multi-step jailbreaks and model drift.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-title">
+                        <span class="feature-dot" style="background: var(--accent-cyan);"></span>
+                        <span>Promptfoo & Canary PR Gates</span>
+                    </div>
+                    <p class="feature-desc">Sub-second inline assertions, baseline prompt injection checks, and static canary probes integrated into GitHub Actions/GitLab runners to block regressions on merge without pipeline lag.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-title">
+                        <span class="feature-dot" style="background: var(--accent-violet);"></span>
+                        <span>DeepEval LLM-as-a-Judge</span>
+                    </div>
+                    <p class="feature-desc">Evaluates faithfulness, toxicity, and context recall using customizable score thresholds (0.1–0.9) for quantitative auditing.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-title">
+                        <span class="feature-dot" style="background: var(--accent-emerald);"></span>
+                        <span>MCP Protocol Audit</span>
+                    </div>
+                    <p class="feature-desc">Audits tool registry bindings and registers warnings on forbidden tools, protecting system resources from malicious prompts.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-title">
+                        <span class="feature-dot" style="background: #eab308;"></span>
+                        <span>MITRE Framework Alignment</span>
+                    </div>
+                    <p class="feature-desc">All scan results and vulnerability markers map directly to the standardized MITRE ATT&CK & MITRE ATLAS adversarial taxonomies.</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-title">
+                        <span class="feature-dot" style="background: #a855f7;"></span>
+                        <span>Gateway-Agnostic Independent Referee</span>
+                    </div>
+                    <p class="feature-desc">Audit any gateway or guardrail implementation (Portkey, LiteLLM, Cloudflare, AWS Bedrock, Azure AI Studio, or custom proxies) without letting the gateway vendor grade their own homework.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Command Center UI Preview (Smaller Display) -->
+        <section class="card" style="text-align: center; align-items: center;">
+            <div class="card-header" style="text-align: left; width: 100%;">
+                <h2>Security Command Center UI</h2>
+                <p>Real-time execution log audit, vulnerability metrics, and target gateway control panel</p>
+            </div>
+            <!-- Smaller Dashboard Image display (max-width: 700px) -->
+            <div style="border: 1px solid var(--border-color); border-radius: 0.75rem; overflow: hidden; background: rgba(3, 7, 18, 0.3); padding: 0.4rem; max-width: 700px; width: 100%; margin-top: 0.5rem;">
+                <img src="./dashboard_preview.png" alt="G1163RT Dashboard Preview" style="display: block; width: 100%; height: auto; border-radius: 0.5rem;" />
+            </div>
+        </section>
+
+        <!-- Pricing and Checkout Sections (Embedded Directly) -->
+        <section class="card card-full" id="pricing">
+            <div class="card-header">
+                <h2>Billing Plans & Activation</h2>
+                <p>Select your desired plan below to complete secure checkout via Stripe and generate activation credentials.</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="price-box" id="plan-trial" onclick="selectPlan('trial')">
+                    <div class="active-badge" id="badge-trial" style="display: none;">Select</div>
+                    <span class="price-tag">Free Trial Tier</span>
+                    <span class="price-value">$0 <span>/ mo</span></span>
+                    <span style="font-size: 0.65rem; color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace; display: block; margin-top: 0.25rem; font-weight: 600;">⚡ Pruned Features</span>
+                    <ul class="price-features" style="margin-top: 0.75rem;">
+                        <li>Fast Inline CI/CD Probes (Promptfoo/Garak)</li>
+                        <li>Single Local Target Runner</li>
+                        <li>Zero-Data Retention (VPC Local)</li>
+                    </ul>
+                </div>
+                <div class="price-box" id="plan-developer" onclick="selectPlan('developer')">
+                    <div class="active-badge" id="badge-developer" style="display: none;">Select</div>
+                    <span class="price-tag">Developer Tier</span>
+                    <span class="price-value">$79 <span>/ mo</span></span>
+                    <ul class="price-features" style="margin-top: 0.75rem;">
+                        <li>Fast CI/CD PR Gates & Static Canary Probes</li>
+                        <li>Monthly Intel Telemetry Sync (/api/intel)</li>
+                        <li>Standard OWASP Top 10 / MITRE ATLAS Mapping</li>
+                        <li>1 Local Runner Key</li>
+                    </ul>
+                </div>
+                <div class="price-box active" id="plan-team" onclick="selectPlan('team')">
+                    <div class="active-badge" id="badge-team">Select</div>
+                    <span class="price-tag">Team Tier</span>
+                    <span class="price-value">$499 <span>/ mo</span></span>
+                    <ul class="price-features" style="margin-top: 0.75rem;">
+                        <li>Fast CI/CD Gates + Weekly Scheduled AI-SPM via Automated AI Red Teaming/Adversarial Probing/Fuzzing Sweeps</li>
+                        <li>PyRIT Multi-Turn Dynamic Fuzzing (1–15 Turns)</li>
+                        <li>DeepEval Automated LLM-as-a-Judge Guardrails</li>
+                        <li>Model Context Protocol (MCP) Tool & Server Audit</li>
+                        <li>Weekly Zero-Day Intel Sync (Up to 3 Runner Keys)</li>
+                    </ul>
+                </div>
+                <div class="price-box" id="plan-enterprise" onclick="selectPlan('enterprise')">
+                    <div class="active-badge" id="badge-enterprise" style="display: none;">Select</div>
+                    <span class="price-tag">Enterprise Tier</span>
+                    <span class="price-value">$4,250 <span>/ mo</span></span>
+                    <ul class="price-features" style="margin-top: 0.75rem;">
+                        <li>Fast CI/CD + Daily Automated AI-SPM via Automated AI Red Teaming/Adversarial Probing/Fuzzing Telemetry Sweeps</li>
+                        <li>Advanced Zero-Day Threat Intel Feeds (Daily Sync)</li>
+                        <li>Unlimited MCP Server Registry & Dynamic Tool Blacklisting</li>
+                        <li>SIEM Webhook Integration & Continuous Drift Alerts</li>
+                        <li>Full ISO 42001 / EU AI Act Automated Audit Reports</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Terms of Service Dialog Link -->
+            <div style="text-align: center; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+                <button onclick="openTosModal()" style="background: none; border: none; color: var(--accent-cyan); text-decoration: underline; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; cursor: pointer; letter-spacing: 0.02em; transition: color 0.2s ease;">⚖️ View Terms of Service (ToS)</button>
+            </div>
+
+            <!-- Panel 0: Free Trial Registration -->
+            <div class="form-card" id="checkout-trial" style="margin-top: 1.5rem; display: none; flex-direction: column; padding: 1.5rem; gap: 1rem;">
+                <div class="form-title">
+                    <div class="form-dot"></div>
+                    <span>Register Your Free Trial Instance</span>
+                </div>
+                <form id="trial-signup-form" onsubmit="handleTrialSignup(event)" style="display: flex; flex-direction: column; gap: 0.85rem;">
+                    <div class="input-group">
+                        <div class="input-item">
+                            <label>Company / Organization Name</label>
+                            <input id="trial_company" type="text" required placeholder="e.g. Acme Corp">
+                        </div>
+                        <div class="input-item">
+                            <label>Admin Email Address</label>
+                            <input id="trial_email" type="email" required placeholder="e.g. admin@acme.com">
+                        </div>
+                        <div class="input-item">
+                            <label>Admin Full Name</label>
+                            <input id="trial_name" type="text" required placeholder="e.g. John Doe">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-download" style="padding: 0.85rem; font-size: 0.85rem; cursor: pointer; width: 100%; justify-content: center; border: none;">⚡ Register & Download Free Trial Bundle</button>
+                </form>
+            </div>
+
+            <!-- Panel 1: Developer Plan Stripe Checkout -->
+            <div class="form-card" id="checkout-developer" style="margin-top: 1.5rem; text-align: center; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; gap: 1.25rem;">
+                <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 50%; width: 3.5rem; height: 3.5rem; display: flex; align-items: center; justify-content: center; color: var(--accent-cyan);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Download & Activate Platform</h3>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); max-width: 320px; line-height: 1.45;">Bypass active subscription and proceed directly to download the on-premises installer pack.</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 400px; align-items: center;">
+                    <button onclick="handleCheckout('developer')" class="btn-download" style="padding: 0.85rem 2.25rem; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; width: 100%; justify-content: center;">⚡ Download Developer Package</button>
+                    <div style="text-align: center; font-size: 0.7rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Or</div>
+                    <button onclick="handleRequestInfo('developer')" class="btn-download" style="background: linear-gradient(135deg, var(--accent-emerald), #059669); color: #030712; font-weight: 700; border: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); width: 100%; justify-content: center; cursor: pointer; padding: 0.85rem;">✉️ Have Questions? Contact Ops (ops@g1163rt.ai)</button>
+                </div>
+            </div>
+
+            <!-- Panel 2: Team Plan Stripe Checkout -->
+            <div class="form-card" id="checkout-team" style="margin-top: 1.5rem; text-align: center; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; gap: 1.25rem;">
+                <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 50%; width: 3.5rem; height: 3.5rem; display: flex; align-items: center; justify-content: center; color: var(--accent-cyan);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Download & Activate Platform</h3>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); max-width: 320px; line-height: 1.45;">Bypass active subscription and proceed directly to download the on-premises installer pack.</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 400px; align-items: center;">
+                    <button onclick="handleCheckout('team')" class="btn-download" style="padding: 0.85rem 2.25rem; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; width: 100%; justify-content: center;">⚡ Download Team Package</button>
+                    <div style="text-align: center; font-size: 0.7rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Or</div>
+                    <button onclick="handleRequestInfo('team')" class="btn-download" style="background: linear-gradient(135deg, var(--accent-emerald), #059669); color: #030712; font-weight: 700; border: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); width: 100%; justify-content: center; cursor: pointer; padding: 0.85rem;">✉️ Have Questions? Contact Ops (ops@g1163rt.ai)</button>
+                </div>
+            </div>
+
+            <!-- Panel 3: Enterprise Plan Stripe Checkout -->
+            <div class="form-card" id="checkout-enterprise" style="margin-top: 1.5rem; text-align: center; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; gap: 1.25rem;">
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 50%; width: 3.5rem; height: 3.5rem; display: flex; align-items: center; justify-content: center; color: var(--accent-emerald);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                    <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">Download & Activate Platform</h3>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); max-width: 320px; line-height: 1.45;">Bypass active subscription and proceed directly to download the on-premises installer pack.</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 400px; align-items: center;">
+                    <button onclick="handleCheckout('enterprise')" class="btn-download" style="padding: 0.85rem 2.25rem; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease; width: 100%; justify-content: center;">⚡ Download Enterprise Package</button>
+                    <div style="text-align: center; font-size: 0.7rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; text-transform: uppercase;">Or</div>
+                    <button onclick="handleRequestInfo('enterprise')" class="btn-download" style="background: linear-gradient(135deg, var(--accent-emerald), #059669); color: #030712; font-weight: 700; border: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15); width: 100%; justify-content: center; cursor: pointer; padding: 0.85rem;">✉️ Have Questions? Contact Ops (ops@g1163rt.ai)</button>
+                </div>
+            </div>
+
+            <!-- Trust Banner / Architectural Footnote -->
+            <div style="margin-top: 1.5rem; background: rgba(6, 182, 212, 0.03); border: 1px dashed var(--accent-cyan); padding: 1.25rem; border-radius: 0.5rem; text-align: left;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; color: var(--accent-cyan);">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: var(--accent-cyan); border-radius: 50%;"></span>
+                    <span>Zero Data Retention • Private VPC Execution</span>
+                </div>
+                <p style="font-size: 0.7rem; line-height: 1.5; color: var(--text-secondary); margin: 0;">
+                    All tests, fuzzing loops, and evaluations execute inside a local Docker runner deployed on your own infrastructure using your own LLM provider keys. No customer prompts, completions, or internal gateway logs are ever sent to G1163RT servers. Subscription tiers govern access to the continuous <code>/api/intel</code> threat intelligence stream, zero-day payloads, and runner license keys.
+                </p>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer style="width: 100%; border-top: 1px solid rgba(51, 65, 85, 0.4); background: rgba(15, 23, 42, 0.25); padding: 2rem 1.5rem; text-align: center; font-size: 0.75rem; color: #64748b; z-index: 10; position: relative;">
+        <div style="max-w-7xl mx-auto space-y-2">
+            <p>G1163RT Red Teaming Platform. Continuous automated security fuzzing and adversary simulation.</p>
+            <p>© 2026 G1163RT Systems. All rights reserved. | <span style="color: #06b6d4; font-weight: 600;">Patent Pending: 64/138,999</span></p>
+        </div>
+    </footer>
+
+
+    <!-- Modal 1: Industry Alignment Paper -->
+    <div id="alignmentModal" class="modal-overlay" onclick="closeAlignmentModalOnOuterClick(event)">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 style="font-size: 0.95rem; font-weight: 700;">G1163RT Architecture, Compliance & EU AI Act Mapping</h3>
+                <button onclick="closeAlignmentModal()" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 0.75rem; font-weight: 600;">NIST AI RMF 1.0 (NIST AI 600-1 GenAI Profile) Mapping</p>
+                <p style="margin-bottom: 1rem;">G1163RT automatically maps evaluation run outputs to the NIST AI Risk Management Framework. This includes under the <strong>Measure</strong> function (empirical robustness, toxicity deflection rates, and context/RAG alignment fidelity scores) and the <strong>Manage</strong> function (continuous variance drift checks and active tool privilege verification).</p>
+                <p style="margin-bottom: 0.75rem; font-weight: 600;">EU AI Act Articles 15 & 72 Compliance Alignment</p>
+                <p style="margin-bottom: 1rem;">The platform satisfies critical compliance mandates for high-risk and general-purpose AI. We address **Article 15** (pre-deployment validation of accuracy, cybersecurity, and adversarial robustness against injections and jailbreaks) and **Article 72** (continuous post-market monitoring using centralized, auditable sync telemetry and logging).</p>
+                <p style="margin-bottom: 0.75rem; font-weight: 600;">OWASP Top 10 for LLM Applications Mapping</p>
+                <p>Security vulnerabilities are mapped directly to OWASP LLM categories. In addition to **LLM01** (Prompt Injections) and **LLM02** (Insecure Output Handling), G1163RT maps and scans for **LLM07** (Insecure Plugin / Tool Design) to explicitly verify Model Context Protocol (MCP) gateway boundaries, privilege permissions, and outbound hooks.</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeAlignmentModal()" class="btn-download" style="padding: 0.5rem 1.25rem; font-size: 0.75rem;"><span class="btn-main">Dismiss</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Terms of Service Modal -->
+    <div id="tosModal" class="modal-overlay" onclick="closeTosModalOnOuterClick(event)">
+        <div class="modal-card" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">⚖️ G1163RT Security Licensing & Terms of Service</h3>
+                <button onclick="closeTosModal()" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 0.75rem; font-weight: 600; color: var(--accent-rose);">IMPORTANT LEGAL NOTICE</p>
+                <p style="margin-bottom: 1rem;">This software is a security testing toolkit designed to evaluate LLMs and AI agent integrations for vulnerabilities. You may only use G1163RT to perform evaluations against targets that you own, operate, or have explicit legal authorization to audit.</p>
+                <p style="margin-bottom: 0.75rem; font-weight: 600;">License Scope</p>
+                <p style="margin-bottom: 1rem;">Developer licenses permit up to 1 concurrent testing runner daemon. Team licenses permit up to 3 concurrent runner daemons. Enterprise tiers support unlimited active runner nodes. Sharing, distributing, or reverse engineering the proprietary elements of the hybrid binary runner without authorization is strictly prohibited.</p>
+                <p style="margin-bottom: 0.75rem; font-weight: 600;">Disclaimer of Liability</p>
+                <p>G1163RT is provided "as is" without warranty of any kind. Under no circumstances shall G1163RT or its contributors be liable for any direct, indirect, incidental, or consequential damages arising from the execution of security evaluations, model bypass attempts, or data leakage audits conducted by this tool.</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeTosModal()" class="btn-download" style="padding: 0.5rem 1.25rem; font-size: 0.75rem;"><span class="btn-main">Accept Terms</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Presentation Slide Deck Modal -->
+    <div id="slides-modal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 850px; min-height: 520px; width: 90%; max-height: 90vh; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; padding: 0;">
+            <div class="modal-header" style="padding: 1.25rem 1.5rem 0.75rem 1.5rem; border-bottom: 1px solid var(--border-color);">
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 0.5rem;">📊 G1 Platform Presentation Deck</h3>
+                <button onclick="closeSlidesModal()" class="modal-close-btn">&times;</button>
+            </div>
+            
+            <!-- Slides Body -->
+            <div class="modal-body" style="flex: 1; padding: 2rem 2.5rem; position: relative; overflow-y: auto; display: flex; align-items: center; text-align: left;">
+                <!-- Slide 1: G1163RT AI Security Products -->
+                <div class="slide active" data-slide="1">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 01 // G1163RT AI Security Products</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">G1163RT AI Security Products</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Next-Generation AI Defense: Ultra-Low Latency Inline Security Proxy & Continuous Independent Adversarial Validation</p>
+                    <ul style="font-size: 0.72rem; line-height: 1.55; color: var(--text-secondary); margin: 0.25rem 0 0 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                    </ul>
+                </div>
+
+                <!-- Slide 2: G1163RT AI Security Products -->
+                <div class="slide" data-slide="2">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 02 // G1163RT AI Security Products</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">G1163RT AI Security Products</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Two distinct, standalone products addressing enterprise GenAI security needs.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.25rem;">
+                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 0.5rem;">
+                            <h3 style="font-size: 0.75rem; color: var(--accent-cyan); margin: 0 0 0.25rem 0;">G1163RT Gateway</h3>
+                            <p style="font-size: 0.6rem; line-height: 1.35; color: var(--text-secondary); margin: 0;">Inline active threat proxy with sub-3ms latency, self-assessment scans, CPU-only architecture, and automated daily updates.</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.6rem; border-radius: 0.5rem;">
+                            <h3 style="font-size: 0.75rem; color: var(--accent-cyan); margin: 0 0 0.25rem 0;">G1 Red-Team SaaS</h3>
+                            <p style="font-size: 0.6rem; line-height: 1.35; color: var(--text-secondary); margin: 0;">Independent verification engine running continuous multi-turn PyRIT fuzzing, DeepEval judges, and compliance-ready audit trails.</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.65rem; color: var(--text-secondary); margin: 0.25rem 0 0 0;"><strong>Included Utility:</strong> Purview-to-Rego offline migration utility converts standard Purview DLP classifiers to Rego rules in &lt;1ms execution.</p>
+                </div>
+
+                <!-- Slide 3: The Dual Challenge of GenAI Security -->
+                <div class="slide" data-slide="3">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 03 // The Dual Challenge of GenAI Se</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">The Dual Challenge of GenAI Security</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Two distinct failure modes make conventional enterprise guardrails untenable.</p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.25rem;">
+                        <div style="background: rgba(255, 255, 255, 0.01); border-left: 2px solid #f43f5e; padding: 0.5rem 0.6rem;">
+                            <strong style="font-size: 0.72rem; color: var(--text-primary); display: block; margin-bottom: 0.2rem;">Multi-Turn Evasion & Latency</strong>
+                            <p style="font-size: 0.6rem; line-height: 1.35; color: var(--text-secondary); margin: 0;">Rigid single-turn firewalls miss adaptive multi-turn escalation (e.g. Crescendo), while probabilistic LLM-based scanners introduce severe latency (100-500ms).</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.01); border-left: 2px solid #f43f5e; padding: 0.5rem 0.6rem;">
+                            <strong style="font-size: 0.72rem; color: var(--text-primary); display: block; margin-bottom: 0.2rem;">Rule Decay & Agentic Tool Exploits</strong>
+                            <p style="font-size: 0.6rem; line-height: 1.35; color: var(--text-secondary); margin: 0;">Static rules decay against autonomous agents and dynamic MCP tool execution. Independent continuous fuzzing is required to verify guardrail integrity.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Product Architecture Overview -->
+                <div class="slide" data-slide="4">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 04 // Product Architecture Overview</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Product Architecture Overview</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Deterministic inline enforcement combined with independent adversarial validation.</p>
+                    <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.25rem; font-size: 0.66rem; color: var(--text-secondary);">
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.2rem;">
+                            <span style="color: var(--text-primary); font-weight: bold; width: 30%;">G1163RT Gateway</span>
+                            <span style="width: 50%;">Synchronous active inference proxy running on CPUs.</span>
+                            <span style="color: var(--accent-cyan); font-family: monospace; font-weight: bold; width: 20%; text-align: right;">Sub-3ms SLA</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.2rem;">
+                            <span style="color: var(--text-primary); font-weight: bold; width: 30%;">G1 Red-Team SaaS</span>
+                            <span style="width: 50%;">External continuous validation and multi-turn fuzzing.</span>
+                            <span style="color: var(--accent-cyan); font-family: monospace; font-weight: bold; width: 20%; text-align: right;">Continuous/Batch</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-bottom: 0.2rem;">
+                            <span style="color: var(--text-primary); font-weight: bold; width: 30%;">Purview-to-Rego</span>
+                            <span style="width: 50%;">Offline compiler converting Purview DLP rules to local OPA files.</span>
+                            <span style="color: var(--accent-cyan); font-family: monospace; font-weight: bold; width: 20%; text-align: right;">&lt;1ms Exec</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 5: System 1: G1163RT Gateway -->
+                <div class="slide" data-slide="5">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 05 // System 1: G1163RT Gateway</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">System 1: G1163RT Gateway</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Deterministic inline threat defense & enforcement pipeline.</p>
+                    <ul style="font-size: 0.72rem; line-height: 1.55; color: var(--text-secondary); margin: 0.25rem 0 0 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                        <li>Synchronous Hot-Path Threat Inspection</li>
+                        <li>Built-in Threat Feeds</li>
+                        <li>Includes automated daily updates for newly discovered prompt injections, jailbreaks, and system prompt leaks.</li>
+                        <li>Self-Assessment Scan</li>
+                        <li>Includes native scheduled self-tests for basic guardrail health monitoring directly within the gateway management portal.</li>
+                        <li>Zero GPU Overhead</li>
+                        <li>Lightweight active inference algorithms execute entirely on standard CPU nodes, eliminating costly GPU infrastructure.</li>
+                    </ul>
+                </div>
+
+                <!-- Slide 6: Architectural Blueprint: Decoupled Request Path -->
+                <div class="slide" data-slide="6">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 06 // Architectural Blueprint: Decou</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Architectural Blueprint: Decoupled Request Path</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Synchronous hot path for enforcement; asynchronous cold path for continuous learning.</p>
+                    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 0.75rem; margin-top: 0.25rem;">
+                        <div>
+                            <h3 style="font-size: 0.78rem; color: var(--accent-cyan); margin: 0 0 0.25rem 0;">Synchronous Hot Path (Go)</h3>
+                            <p style="font-size: 0.58rem; line-height: 1.35; color: var(--text-secondary); margin: 0;">In-memory Layer 1 & 2 pattern validation and Open Policy Agent (OPA) rule evaluation in <strong>&lt;1ms</strong>. Zero GPU required. P50 latency &lt;3ms, P99 &lt;28ms.</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 0.78rem; color: var(--accent-cyan); margin: 0 0 0.25rem 0;">Asynchronous Cold Path (Python/Julia)</h3>
+                            <p style="font-size: 0.58rem; line-height: 1.35; color: var(--text-secondary); margin: 0;">Forked off path via Kafka queue. Sidecars run Bayesian learning updates to refresh priors in Redis cache. Zero latency impact on user streams.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 7: The Four-Tiered Manifold -->
+                <div class="slide" data-slide="7">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 07 // The Four-Tiered Manifold</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">The Four-Tiered Manifold</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Biological time-scale separation for multi-layered threat detection.</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; font-size: 0.6rem; margin-top: 0.25rem;">
+                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--accent-cyan); display: block;">1. Syntax</strong>
+                            <span style="color: var(--text-secondary); font-size: 0.55rem; display:block; margin: 0.15rem 0;">t½: 1.38 ms</span>
+                            <p style="margin: 0; line-height: 1.3; font-size: 0.55rem; color: var(--text-secondary);">Rapid lexical changes (SQLi, command injections).</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--accent-cyan); display: block;">2. Compliance</strong>
+                            <span style="color: var(--text-secondary); font-size: 0.55rem; display:block; margin: 0.15rem 0;">t½: 2.0 s</span>
+                            <p style="margin: 0; line-height: 1.3; font-size: 0.55rem; color: var(--text-secondary);">Enforces rate limits and Presidio PII redaction.</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--accent-cyan); display: block;">3. Intent</strong>
+                            <span style="color: var(--text-secondary); font-size: 0.55rem; display:block; margin: 0.15rem 0;">t½: 69 s</span>
+                            <p style="margin: 0; line-height: 1.3; font-size: 0.55rem; color: var(--text-secondary);">Sequence risk indicating multi-turn exfiltration.</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--accent-cyan); display: block;">4. Watcher</strong>
+                            <span style="color: var(--text-secondary); font-size: 0.55rem; display:block; margin: 0.15rem 0;">t½: 19.25 h</span>
+                            <p style="margin: 0; line-height: 1.3; font-size: 0.55rem; color: var(--text-secondary);">Cross-session anomaly density tracking.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 8: Dynamic Rebalancing Engine -->
+                <div class="slide" data-slide="8">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 08 // Dynamic Rebalancing Engine</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Dynamic Rebalancing Engine</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Solving the persistent agent dilemma without throttling legitimate automation.</p>
+                    <ul style="font-size: 0.72rem; line-height: 1.55; color: var(--text-secondary); margin: 0.25rem 0 0 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                        <li>Adaptive Suspicion Decay</li>
+                        <li>Automated agents produce high transaction volumes that trigger legacy rate-limiters. G1163RT dynamically adjusts decay rates based on transaction hygiene.</li>
+                        <li>Negative Reinforcement Loop</li>
+                        <li>Safe behavior actively pays down risk scores, while malicious patterns compound suspicion.</li>
+                        <li><strong>Decay Rate Capped at 2.5×:</strong> High-velocity agents scale decay rate dynamically so legitimate workflows are never throttled.</li>
+                        <li><strong>Burst Handling:</strong> Short spikes in benign traffic drain suspicion quickly without security interventions.</li>
+                        <li><strong>Clean Transactions Repay Trust:</strong> Every 100% clean transaction actively drains suspicion from the session key.</li>
+                        <li><strong>Brute-Force Trapping:</strong> Rapid-fire bypass attempts compound suspicion exponentially, trapping attackers in real time.</li>
+                    </ul>
+                </div>
+
+                <!-- Slide 9: Bridge Utility: Purview-to-Rego Converter -->
+                <div class="slide" data-slide="9">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 09 // Bridge Utility: Purview-to-Reg</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Bridge Utility: Purview-to-Rego Converter</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Free migration utility translating enterprise Microsoft Purview policies to local OPA files.</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.25rem; font-size: 0.6rem; color: var(--text-secondary); text-align: left;">
+                        <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.15rem;">DLP Purview Export</strong>
+                            Accepts standard Purview.zip exports containing enterprise classifiers & sensitive types.
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.15rem;">Offline Translation</strong>
+                            Local offline compiler compiles schemas into readable OPA Rego rules with zero cloud dependencies.
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.15rem;">Local Execution</strong>
+                            Outputs main.rego rule files executing decisions inside local sidecar proxy pods in &lt;1ms evaluation.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 10: G1 RTaaS Origin Story -->
+                <div class="slide" data-slide="10">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 10 // G1 RTaaS Origin Story</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">G1 RTaaS Origin Story</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">How internal engineering requirements birthed System 2 (G1 Red-Team Engine).</p>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; font-size: 0.58rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                        <div style="background: rgba(255,255,255,0.01); padding: 0.4rem; border-radius: 0.25rem; border-top: 2px solid var(--accent-cyan);">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.15rem;">1. Gateway Build</strong>
+                            Built G1163RT Gateway to deliver active-inference security under 10ms SLA.
+                        </div>
+                        <div style="background: rgba(255,255,255,0.01); padding: 0.4rem; border-radius: 0.25rem; border-top: 2px solid var(--accent-cyan);">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.15rem;">2. Rule Decay</strong>
+                            Faced rapid rule decay against new jailbreaks, Crescendo, and MCP exploits.
+                        </div>
+                        <div style="background: rgba(255,255,255,0.01); padding: 0.4rem; border-radius: 0.25rem; border-top: 2px solid var(--accent-cyan);">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.15rem;">3. In-House Harness</strong>
+                            Developed advanced harness combining PyRIT fuzzing, DeepEval, and threat feeds.
+                        </div>
+                        <div style="background: rgba(255,255,255,0.01); padding: 0.4rem; border-radius: 0.25rem; border-top: 2px solid var(--accent-cyan);">
+                            <strong style="color: var(--text-primary); display: block; margin-bottom: 0.15rem;">4. stand-alone SaaS</strong>
+                            Productized G1 Red-Team Engine to provide CISOs with independent safety verifications.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 11: System 2: G1 Red-Team SaaS Engine -->
+                <div class="slide" data-slide="11">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 11 // System 2: G1 Red-Team SaaS Eng</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">System 2: G1 Red-Team SaaS Engine</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Independent third-party validation SaaS & direct model benchmarking service.</p>
+                    <ul style="font-size: 0.72rem; line-height: 1.55; color: var(--text-secondary); margin: 0.25rem 0 0 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                        <li>Third-Party Verification</li>
+                        <li>While gateways often include built-in self-tests, CISOs and compliance auditors demand independent third-party verification.</li>
+                        <li>Direct Model Benchmarking</li>
+                        <li>Can execute directly against base LLMs and custom models without requiring a gateway in front.</li>
+                        <li>Fires automated multi-turn PyRIT probes at any gateway (G1163RT, Lakera, Bedrock, NeMo).</li>
+                        <li>Provides unbiased executive reports and compliance-ready audit trails.</li>
+                        <li>Maintains an independent attack corpus updated daily from global threat feeds.</li>
+                        <li>Tests raw model guardrail baselines before production deployment.</li>
+                        <li>Evaluates system prompt robustness, safety alignment, and RAG vulnerability.</li>
+                        <li>Helps teams select the safest foundation model for enterprise deployment.</li>
+                    </ul>
+                </div>
+
+                <!-- Slide 12: Validation Mechanics: Fuzzing, Scoring & Auditing -->
+                <div class="slide" data-slide="12">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 12 // Validation Mechanics: Fuzzing,</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Validation Mechanics: Fuzzing, Scoring & Auditing</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">What the Red-Team engine executes on every test run.</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-top: 0.25rem; font-size: 0.6rem; color: var(--text-secondary);">
+                        <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--accent-cyan); display: block; font-size: 0.7rem; margin-bottom: 0.15rem;">PyRIT Fuzzing</strong>
+                            Multi-turn adversarial agent loops:<br>
+                            • Turn 1: Social & prefix injections.<br>
+                            • Turn 2: Hijack & payload split.<br>
+                            • Turn 15+: Escalated steering.
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--accent-cyan); display: block; font-size: 0.7rem; margin-bottom: 0.15rem;">DeepEval Scoring</strong>
+                            Automated LLM judges:<br>
+                            • Toxicity &lt; 0.05 limit.<br>
+                            • Faithfulness &gt; 0.90.<br>
+                            • Context Recall &gt; 0.85.
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--accent-cyan); display: block; font-size: 0.7rem; margin-bottom: 0.15rem;">MCP Auditing</strong>
+                            Protocol privilege boundaries:<br>
+                            • Ed25519 signature checks.<br>
+                            • Block eval/exec execution.<br>
+                            • Outbound webhook checks.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 13: Operational Cadence: Threat Ingestion Schedule -->
+                <div class="slide" data-slide="13">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 13 // Operational Cadence: Threat In</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Operational Cadence: Threat Ingestion Schedule</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Four distinct operational rhythms keep attack corpora current.</p>
+                    <ul style="font-size: 0.72rem; line-height: 1.55; color: var(--text-secondary); margin: 0.25rem 0 0 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                        <li>Intel Sync</li>
+                        <li>Automated ingestion syncing JailbreakBench, ZooSec, and newly disclosed single-turn signatures every 24 hours.</li>
+                        <li>Semantic Fuzzing</li>
+                        <li>Executes PAIR, Crescendo, and HarmBench multi-turn tests alongside WildChat false-positive drift monitoring.</li>
+                        <li>Complex Attack</li>
+                        <li>Tests indirect RAG payload hijacks, Unicode obfuscation, and Model Context Protocol (MCP) tool exploits.</li>
+                        <li>Frameworks</li>
+                        <li>Re-maps entire testing corpus to NIST AI RMF 1.0 (Measure/Manage functions), EU AI Act (Articles 15 & 72), OWASP Top 10 for LLMs (explicitly mapping LLM01, LLM02, and LLM07 for MCP protocol security), and MITRE ATLAS.</li>
+                    </ul>
+                </div>
+
+                <!-- Slide 14: Competitive Matrix: Market Positioning & Latency SLAs -->
+                <div class="slide" data-slide="14">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 14 // Competitive Matrix: Market Pos</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Competitive Matrix: Market Positioning & Latency SLAs</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Comparing G1163RT Gateway inline performance against industry alternatives.</p>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.6rem; color: var(--text-secondary); text-align: left; margin-top: 0.25rem;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-primary);">
+                                <th style="padding: 0.25rem 0.4rem; font-weight: 700;">Provider</th>
+                                <th style="padding: 0.25rem 0.4rem; font-weight: 700;">Latency SLA</th>
+                                <th style="padding: 0.25rem 0.4rem; font-weight: 700;">GPU Required</th>
+                                <th style="padding: 0.25rem 0.4rem; font-weight: 700;">Multi-Turn State</th>
+                                <th style="padding: 0.25rem 0.4rem; font-weight: 700;">MCP Audit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                                <td style="padding: 0.25rem 0.4rem; color: var(--accent-cyan); font-weight: bold;">G1163RT Gateway</td>
+                                <td style="padding: 0.25rem 0.4rem; font-family: monospace;">~3.0ms</td>
+                                <td style="padding: 0.25rem 0.4rem;">None (CPU)</td>
+                                <td style="padding: 0.25rem 0.4rem; color: var(--color-allow);">Yes (4-Tier)</td>
+                                <td style="padding: 0.25rem 0.4rem; color: var(--color-allow);">Yes</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                                <td style="padding: 0.25rem 0.4rem; font-weight: bold;">Lakera Guard</td>
+                                <td style="padding: 0.25rem 0.4rem; font-family: monospace;">~30-50ms</td>
+                                <td style="padding: 0.25rem 0.4rem;">Cloud API</td>
+                                <td style="padding: 0.25rem 0.4rem; color: var(--color-block);">No (Single)</td>
+                                <td style="padding: 0.25rem 0.4rem; color: var(--color-block);">No</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                                <td style="padding: 0.25rem 0.4rem; font-weight: bold;">NeMo Guardrails</td>
+                                <td style="padding: 0.25rem 0.4rem; font-family: monospace;">&gt;120ms</td>
+                                <td style="padding: 0.25rem 0.4rem;">High (GPU)</td>
+                                <td style="padding: 0.25rem 0.4rem; color: var(--color-allow);">Yes (Colang)</td>
+                                <td style="padding: 0.25rem 0.4rem; color: var(--color-block);">No</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.25rem 0.4rem; font-weight: bold;">Probabilistic LLM Filters</td>
+                                <td style="padding: 0.25rem 0.4rem; font-family: monospace;">&gt;250ms</td>
+                                <td style="padding: 0.25rem 0.4rem;">High (GPU)</td>
+                                <td style="padding: 0.25rem 0.4rem; color: var(--color-block);">No</td>
+                                <td style="padding: 0.25rem 0.4rem; color: var(--color-block);">No</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Slide 15: Product Capabilities & Feature Breakdown -->
+                <div class="slide" data-slide="15">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 15 // Product Capabilities & Feature</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Product Capabilities & Feature Breakdown</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Independent feature sets for our two distinct products.</p>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.58rem; color: var(--text-secondary); text-align: left; margin-top: 0.25rem;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-primary);">
+                                <th style="padding: 0.25rem 0.4rem; font-weight: 700; width: 50%;">Security Feature Capabilities</th>
+                                <th style="padding: 0.25rem 0.4rem; font-weight: 700; text-align: center; width: 25%;">G1163RT Gateway</th>
+                                <th style="padding: 0.25rem 0.4rem; font-weight: 700; text-align: center; width: 25%;">G1 Red-Team SaaS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                                <td style="padding: 0.25rem 0.4rem;">Sub-3.0ms Synchronous Hot-Path Threat Proxy</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--color-allow); font-weight: bold;">✔</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--text-muted);">—</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                                <td style="padding: 0.25rem 0.4rem;">Purview DLP Rule Offline Rego Compiler</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--color-allow); font-weight: bold;">✔</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--text-muted);">—</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                                <td style="padding: 0.25rem 0.4rem;">Dynamic Conversational Attacker Agent Fuzzing (PyRIT)</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--text-muted);">—</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--color-allow); font-weight: bold;">✔</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                                <td style="padding: 0.25rem 0.4rem;">Quantitative LLM-as-a-Judge Scoring & Sliders</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--text-muted);">—</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--color-allow); font-weight: bold;">✔</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.02);">
+                                <td style="padding: 0.25rem 0.4rem;">Model Context Protocol (MCP) Boundary privilege checks</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--color-allow); font-weight: bold;">✔</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--color-allow); font-weight: bold;">✔</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.25rem 0.4rem;">Centralized SIEM Webhook Reporting (Splunk/Datadog)</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--text-muted);">—</td>
+                                <td style="padding: 0.25rem 0.4rem; text-align: center; color: var(--color-allow); font-weight: bold;">✔</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Slide 16: Commercial Tiers: G1 Red-Team Subscription -->
+                <div class="slide" data-slide="16">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 16 // Commercial Tiers: G1 Red-Team </div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Commercial Tiers: G1 Red-Team Subscription</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Flexible SaaS subscription tiers for independent AI security auditing.</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.25rem; font-size: 0.56rem; color: var(--text-secondary);">
+                        <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--text-primary); font-size: 0.7rem; display: block;">Developer</strong>
+                            <strong style="color: var(--accent-cyan); display: block; margin-bottom: 0.15rem;">$79 / mo</strong>
+                            • Monthly threat sync<br>
+                            • Static string probes<br>
+                            • Basic refusal checks<br>
+                            • 1 daemon key (500 runs)
+                        </div>
+                        <div style="background: rgba(6, 182, 212, 0.05); border: 1px solid var(--accent-cyan); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--text-primary); font-size: 0.7rem; display: block;">Team</strong>
+                            <strong style="color: var(--accent-cyan); display: block; margin-bottom: 0.15rem;">$499 / mo</strong>
+                            • Weekly threat sync<br>
+                            • PyRIT multi-turn fuzz<br>
+                            • DeepEval metrics & gates<br>
+                            • 1 MCP audit (5k runs)
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); padding: 0.45rem; border-radius: 0.25rem;">
+                            <strong style="color: var(--text-primary); font-size: 0.7rem; display: block;">Enterprise</strong>
+                            <strong style="color: var(--accent-cyan); display: block; margin-bottom: 0.15rem;">$4,250 / mo</strong>
+                            • Daily threat sync<br>
+                            • Zero-day custom probes<br>
+                            • Custom LLM judges<br>
+                            • Unlimited MCP & SIEM
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 17: Complete GenAI Defense & Audit Strategy -->
+                <div class="slide" data-slide="17">
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">Slide 17 // Complete GenAI Defense & Audit</div>
+                    <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; line-height: 1.2;">Complete GenAI Defense & Audit Strategy</h2>
+                    <p style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin: 0;">Deterministic runtime enforcement paired with independent third-party validation.</p>
+                    <ul style="font-size: 0.72rem; line-height: 1.55; color: var(--text-secondary); margin: 0.25rem 0 0 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.35rem;">
+                        <li>G1163RT Gateway</li>
+                        <li>The fast, deterministic runtime perimeter that blocks attacks without slowing down business operations.</li>
+                        <li>G1 Red-Team Engine</li>
+                        <li>The independent validation service that gives CISOs objective proof of model and gateway security.</li>
+                        <li>Inline sub-3ms security active inference proxy.</li>
+                        <li>Includes daily automated threat updates & self-scans.</li>
+                        <li>Zero GPU overhead for high-efficiency enterprise scaling.</li>
+                        <li>Continuous multi-turn adversarial fuzzing SaaS.</li>
+                        <li>Direct LLM model benchmarking & safety scoring.</li>
+                        <li>Third-party verification for risk & compliance committees.</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Slide Navigation Footer -->
+            <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: rgba(3, 7, 18, 0.4);">
+                <button onclick="prevSlide()" id="prev-slide-btn" class="btn-download" style="padding: 0.45rem 1rem; font-size: 0.75rem; background: var(--border-color); color: var(--text-primary); border: 1px solid var(--border-color); cursor: pointer; width: auto; box-shadow: none; opacity: 0.5; pointer-events: none;">&larr; Previous</button>
+                
+                <!-- Slide Progress Indicator -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 0.25rem; flex: 1; margin: 0 1.5rem;">
+                    <div style="font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; color: var(--text-secondary);">
+                        Slide <span id="current-slide-num">1</span> of 17
+                    </div>
+                    <div style="width: 100%; max-width: 200px; height: 4px; background: var(--border-color); border-radius: 2px; overflow: hidden;">
+                        <div id="slide-progress-bar" style="width: 5.88%; height: 100%; background: var(--accent-cyan); transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+
+                <button onclick="nextSlide()" id="next-slide-btn" class="btn-download" style="padding: 0.45rem 1rem; font-size: 0.75rem; background: var(--accent-cyan); color: #030712; border: none; cursor: pointer; width: auto; font-weight: 700; box-shadow: none;">Next &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adversarial/FAQ Modal -->
+    <div id="faq-modal" class="modal-overlay" onclick="closeFaqModalOnOuterClick(event)">
+        <div class="modal-card" style="max-width: 800px; max-height: 85vh; min-height: 520px; width: 90%; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; padding: 0;">
+            <div class="modal-header" style="padding: 1.25rem 1.5rem 0.75rem 1.5rem; border-bottom: 1px solid var(--border-color);">
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 0.5rem;">🛡️ Red Teaming AI Systems: An Independent Infrastructure Stance</h3>
+                <button onclick="closeFaqModal()" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body" style="flex: 1; padding: 1.5rem 2rem; overflow-y: auto; font-family: sans-serif; font-size: 0.75rem; color: var(--text-secondary); line-height: 1.6; text-align: left;">
+                <div style="margin-bottom: 1.25rem; border-left: 2px solid var(--accent-cyan); padding-left: 0.75rem;">
+                    <h4 style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">1. Why do you need AI red teaming?</h4>
+                    <p style="margin: 0;">Traditional penetration testing evaluates static software code, networks, and perimeter firewalls. It completely misses how generative models and probabilistic systems fail under adversarial manipulation. Organizations need AI red teaming because modern models and agentic workflows are vulnerable to behavioral exploits, prompt injections, and contextual drift. Without ongoing validation, systems remain blind to how dynamic inputs break safety boundaries.</p>
+                </div>
+                <div style="margin-bottom: 1.25rem; border-left: 2px solid var(--accent-cyan); padding-left: 0.75rem;">
+                    <h4 style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">2. What makes AI red teaming different from traditional red teaming?</h4>
+                    <p style="margin: 0;">Traditional red teams target infrastructure access controls and credential vulnerabilities. AI red teaming focuses entirely on behavioral and semantic manipulation. Furthermore, effective AI red teaming must be conducted independently. Internal development teams suffer from confirmation bias and cannot objectively audit the security mechanisms they built themselves. Security infrastructure—such as an independent runtime gateway—requires dedicated, third-party adversarial testing to verify that protection mechanisms hold under pressure.</p>
+                </div>
+                <div style="margin-bottom: 1.25rem; border-left: 2px solid var(--accent-cyan); padding-left: 0.75rem;">
+                    <h4 style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">3. How does AI red teaming work?</h4>
+                    <p style="margin: 0;">Effective AI red teaming operates via automated, subscription-based continuous evaluation. It deploys autonomous adversarial agents to execute multi-turn fuzzing, stateful conversation trees, and zero-day threat simulations against target environments. This ongoing validation stream ensures that defenses adapt dynamically to emerging attack methodologies.</p>
+                </div>
+                <div style="margin-bottom: 1.25rem; border-left: 2px solid var(--accent-cyan); padding-left: 0.75rem;">
+                    <h4 style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">4. What sorts of challenges and trade-offs does AI red teaming present?</h4>
+                    <p style="margin: 0;">Poorly integrated testing tools generate high volumes of noise, introduce unacceptable system latency, or attempt to over-engineer inline filters that choke core application utility. The primary trade-off is balancing thorough security scrutiny with operational performance. This is solved by architectural separation: decoupling the testing and enforcement layers so that security gateways operate cleanly without breaking agentic business workflows.</p>
+                </div>
+                <div style="margin-bottom: 1.25rem; border-left: 2px solid var(--accent-cyan); padding-left: 0.75rem;">
+                    <h4 style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">5. How to implement AI red teaming step-by-step</h4>
+                    <p style="margin: 0;">Implementation requires a disciplined progression: Scope Definition (islanding assets and risk thresholds), Automated Integration (embedding fuzzing into CI/CD pipelines), Independent Auditing (third-party evaluation of runtime defenses), and Closed-Loop Remediation (translating findings into hardened policy rules).</p>
+                </div>
+                <div style="margin-bottom: 1.25rem; border-left: 2px solid var(--accent-cyan); padding-left: 0.75rem;">
+                    <h4 style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">6. What tools are available for AI red teaming?</h4>
+                    <p style="margin: 0;">Modern environments require dynamic platforms capable of multi-turn agentic orchestration, fuzzing, and continuous threat intelligence updates that map systematically to frameworks like MITRE ATLAS.</p>
+                </div>
+                <div style="margin-bottom: 1.25rem; border-left: 2px solid var(--accent-cyan); padding-left: 0.75rem;">
+                    <h4 style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">7. Real-world examples of AI red teaming</h4>
+                    <p style="margin: 0;">Practical simulations focus on complex scenarios: an attacker using multi-turn context shifting to erode guardrails, an indirect prompt injection smuggled via an external database lookup, or an agent manipulated into executing unauthorized actions.</p>
+                </div>
+                <div style="margin-bottom: 1.25rem; border-left: 2px solid var(--accent-cyan); padding-left: 0.75rem;">
+                    <h4 style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">8. What frameworks and regulations support AI red teaming?</h4>
+                    <p style="margin: 0;">Standardized taxonomies—such as OWASP Top 10 for LLMs and MITRE ATLAS—provide the baseline structure needed to ensure red teaming results are consistent, measurable, and acceptable to enterprise risk governance.</p>
+                </div>
+                <div style="margin-bottom: 1.25rem; border-left: 2px solid var(--accent-cyan); padding-left: 0.75rem;">
+                    <h4 style="font-weight: 700; color: var(--text-primary); font-size: 0.85rem; margin-bottom: 0.25rem;">9. AI red teaming FAQs</h4>
+                    <p style="margin: 0;">AI security is a continuous operational requirement. Because models and threat vectors change constantly, red teaming must be maintained as an ongoing, subscription-driven validation discipline rather than a static milestone.</p>
+                </div>
+                <div style="border-top: 1px solid var(--border-color); padding-top: 0.75rem; font-size: 0.65rem; color: var(--text-muted); line-height: 1.5; margin-top: 1.25rem;">
+                    <strong>LEGAL DISCLAIMER & LIMITATION OF LIABILITY:</strong><br>
+                    The information, frameworks, concepts, and technical summaries provided in this document are for general informational, educational, and architectural guidance purposes only. G1163RT Security Labs, its affiliates, officers, employees, and agents (collectively, "G1163RT") make no representations or warranties of any kind, express or implied, regarding the completeness, accuracy, reliability, suitability, or availability of the methodologies described herein.<br>
+                    In no event shall G1163RT be held liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of, reliance upon, or implementation of the concepts, advice, or testing architectures outlined in this document, even if advised of the possibility of such damage. Users assume full and sole responsibility for their own security postures, compliance frameworks, and production deployments.
+                </div>
+                <div style="text-align: right; font-size: 0.65rem; color: var(--text-muted); font-family: monospace; margin-top: 0.5rem;">
+                    Confidential | G1163RT Security
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 0.75rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
+                <button onclick="closeFaqModal()" class="btn-download" style="padding: 0.5rem 1.25rem; font-size: 0.75rem; margin: 0;"><span class="btn-main">Dismiss</span></button>
+            </div>
+        </div>
+    </div>
+
+<script>
+
+        // G1 Presentation Slide Deck Controllers
+        let currentSlide = 1;
+        const totalSlides = 17;
+
+        function openSlidesModal() {
+            document.getElementById('slides-modal').classList.add('show');
+            goToSlide(1);
+            window.addEventListener('keydown', handleSlideKeydown);
+        }
+
+        function closeSlidesModal() {
+            document.getElementById('slides-modal').classList.remove('show');
+            window.removeEventListener('keydown', handleSlideKeydown);
+        }
+
+        function handleSlideKeydown(e) {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'Escape') {
+                closeSlidesModal();
+            }
+        }
+
+        function goToSlide(slideNum) {
+            currentSlide = slideNum;
+            
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            const activeSlide = document.querySelector(`.slide[data-slide="${slideNum}"]`);
+            if (activeSlide) {
+                activeSlide.classList.add('active');
+            }
+
+            // Update progress bar
+            const percent = (slideNum / 17) * 100;
+            document.getElementById('slide-progress-bar').style.width = percent + "%";
+            document.getElementById('current-slide-num').innerText = slideNum;
+
+            const prevBtn = document.getElementById('prev-slide-btn');
+            const nextBtn = document.getElementById('next-slide-btn');
+
+            if (slideNum === 1) {
+                prevBtn.style.opacity = '0.4';
+                prevBtn.style.pointerEvents = 'none';
+            } else {
+                prevBtn.style.opacity = '1';
+                prevBtn.style.pointerEvents = 'auto';
+            }
+
+            if (slideNum === totalSlides) {
+                nextBtn.innerText = 'Finish';
+            } else {
+                nextBtn.innerHTML = 'Next &rarr;';
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                goToSlide(currentSlide + 1);
+            } else {
+                closeSlidesModal();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        // FAQ Modal handlers
+        function openFaqModal() {
+            document.getElementById('faq-modal').classList.add('show');
+        }
+
+        function closeFaqModal() {
+            document.getElementById('faq-modal').classList.remove('show');
+        }
+
+        function closeFaqModalOnOuterClick(e) {
+            if (e.target === document.getElementById('faq-modal')) {
+                closeFaqModal();
+            }
+        }
+
+        // Stripe settings
+        const STRIPE_ENABLED = true;
+        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51U3W0TCkhjQl4PAaD9vx4ARHl6ZPzn8XcPgWiUGanHFZdQddim2NUWS3WI4J22MytfXxp0VFkVstgqjUt6aieicA00BByPpopo';
+        const STRIPE_PAYMENT_LINKS = {
+            developer: 'https://buy.stripe.com/dRm8wO1Y58Eo4pdbXD8og05',
+            team: 'https://buy.stripe.com/14A6oG9qx8EodZN0eV8og01',
+            enterprise: 'https://buy.stripe.com/aFa9ASgSZ07S08XaTz8og06'
+        };
+        
+        let currentPlan = 'team'; // Team active by default
+
+
+        // Initialize Stripe
+        let stripeInstance = null;
+        try {
+            if (typeof Stripe !== 'undefined' && STRIPE_PUBLISHABLE_KEY && STRIPE_ENABLED) {
+                stripeInstance = Stripe(STRIPE_PUBLISHABLE_KEY);
+            }
+        } catch (e) {
+            console.error("Failed to initialize Stripe client SDK", e);
+        }
+
+        function openAlignmentModal() {
+            document.getElementById('alignmentModal').classList.add('show');
+        }
+        
+        function closeAlignmentModal() {
+            document.getElementById('alignmentModal').classList.remove('show');
+        }
+        
+        function closeAlignmentModalOnOuterClick(e) {
+            if (e.target === document.getElementById('alignmentModal')) {
+                closeAlignmentModal();
+            }
+        }
+
+        function openTosModal() {
+            document.getElementById('tosModal').classList.add('show');
+        }
+        
+        function closeTosModal() {
+            document.getElementById('tosModal').classList.remove('show');
+        }
+        
+        function closeTosModalOnOuterClick(e) {
+            if (e.target === document.getElementById('tosModal')) {
+                closeTosModal();
+            }
+        }
+
+        function selectPlan(plan) {
+            currentPlan = plan;
+            
+            const trialBox = document.getElementById('plan-trial');
+            const developerBox = document.getElementById('plan-developer');
+            const teamBox = document.getElementById('plan-team');
+            const enterpriseBox = document.getElementById('plan-enterprise');
+            
+            const trialBadge = document.getElementById('badge-trial');
+            const developerBadge = document.getElementById('badge-developer');
+            const teamBadge = document.getElementById('badge-team');
+            const enterpriseBadge = document.getElementById('badge-enterprise');
+            
+            const checkoutTrial = document.getElementById('checkout-trial');
+            const checkoutDeveloper = document.getElementById('checkout-developer');
+            const checkoutTeam = document.getElementById('checkout-team');
+            const checkoutEnterprise = document.getElementById('checkout-enterprise');
+            
+            // Remove active classes
+            trialBox.classList.remove('active');
+            developerBox.classList.remove('active');
+            teamBox.classList.remove('active');
+            enterpriseBox.classList.remove('active');
+            
+            // Hide all badges
+            trialBadge.style.display = 'none';
+            developerBadge.style.display = 'none';
+            teamBadge.style.display = 'none';
+            enterpriseBadge.style.display = 'none';
+            
+            // Hide all checkout panels
+            checkoutTrial.style.display = 'none';
+            checkoutDeveloper.style.display = 'none';
+            checkoutTeam.style.display = 'none';
+            checkoutEnterprise.style.display = 'none';
+            
+            if (plan === 'trial') {
+                trialBox.classList.add('active');
+                trialBadge.style.display = 'block';
+                trialBadge.innerText = 'Select';
+                checkoutTrial.style.display = 'flex';
+            } else if (plan === 'developer') {
+                developerBox.classList.add('active');
+                developerBadge.style.display = 'block';
+                developerBadge.innerText = 'Select';
+                checkoutDeveloper.style.display = 'flex';
+            } else if (plan === 'team') {
+                teamBox.classList.add('active');
+                teamBadge.style.display = 'block';
+                teamBadge.innerText = 'Select';
+                checkoutTeam.style.display = 'flex';
+            } else {
+                enterpriseBox.classList.add('active');
+                enterpriseBadge.style.display = 'block';
+                enterpriseBadge.innerText = 'Select';
+                checkoutEnterprise.style.display = 'flex';
+            }
+        }
+
+        function getApiUrl(path) {
+            if (window.location.protocol === 'file:') {
+                return 'https://portal.g1163rt.ai' + path;
+            }
+            return path;
+        }
+
+        async function handleTrialSignup(e) {
+            e.preventDefault();
+            const company_name = document.getElementById('trial_company').value;
+            const admin_email = document.getElementById('trial_email').value;
+            const admin_name = document.getElementById('trial_name').value;
+            
+            try {
+                const response = await fetch(getApiUrl('/v1/trial/signup'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ company_name, admin_email, admin_name, product: 'redteam' })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    window.location.href = window.location.origin + window.location.pathname.replace('redteamonly.html', '').replace(/\/$/, '') + '/success.html?session_id=mock_session_trial&key=' + encodeURIComponent(data.api_key);
+                } else {
+                    const error = await response.json();
+                    alert("Registration failed: " + (error.detail || "Unknown error"));
+                }
+            } catch (err) {
+                alert("Registration request failed. Please check network connection.");
+            }
+        }
+
+        function handleRequestInfo(plan) {
+            const planName = plan ? plan.toUpperCase() : "GENERAL";
+            const price = plan === 'developer' ? '79' : plan === 'team' ? '499' : '4,250';
+            const subject = encodeURIComponent("G1163RT " + planName + " Tier Inquiry");
+            const body = encodeURIComponent(
+                "Hello Ops Team,\n\n" +
+                "I have some questions regarding the " + planName + " tier ($" + price + "/mo) and its capabilities.\n\n" +
+                "Please contact me to discuss details.\n\n" +
+                "Regards,"
+            );
+            window.location.href = "mailto:ops@g1163rt.ai?subject=" + subject + "&body=" + body;
+        }
+
+        function handleCheckout(plan) {
+            const planSelected = plan || currentPlan;
+            const stripeUrl = STRIPE_PAYMENT_LINKS[planSelected];
+            
+            if (STRIPE_ENABLED && stripeUrl && !stripeUrl.includes('mock_link')) {
+                window.location.href = stripeUrl;
+                return;
+            }
+            
+            window.location.href = window.location.origin + window.location.pathname.replace('redteamonly.html', '').replace(/\/$/, '') + '/success.html?session_id=mock_session_' + planSelected;
+        }
+
+        // Initialize first view
+        window.addEventListener('DOMContentLoaded', () => {
+            selectPlan('team');
+        });
+    </script>
+</body>
+</html>

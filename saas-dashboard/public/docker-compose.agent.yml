@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  g1163rt-runner:
+    build:
+      context: c:/Users/chuck/redteam/hybrid-runner
+      dockerfile: Dockerfile
+    container_name: g1163rt-agent-runner
+    restart: always
+    environment:
+      - SAAS_URL=http://host.docker.internal:3001
+      - RUNNER_TOKEN=g1163rt_token_40fb3d1a_9e28f3a
+      - POLL_INTERVAL=5
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

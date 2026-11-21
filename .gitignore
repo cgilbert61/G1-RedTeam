@@ -1,0 +1,44 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+report.xml
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.vercel/
+npm-debug.log*
+
+# Environment, secrets, and local runtime state
+.env
+.env.*
+!.env.example
+*.db
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+jobs_db.json
+.runner_id
+
+# Generated distribution archives & staging builds
+*.zip
+onprem-test/
+onprem-trial/
+
+# Temporary, scratch, and log recovery files
+scratch/
+log_match_*.txt
+restored_*
+temp.*
+temp_*
+
+# OS / IDE
+.DS_Store
+Thumbs.db

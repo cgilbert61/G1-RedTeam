@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  saas-dashboard:
+    build:
+      context: ./saas-dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    volumes:
+      - ./saas-dashboard/jobs_db.json:/app/jobs_db.json
+      - c:/Users/chuck/Downloads:/downloads
+
+  g1julia-mock:
+    build:
+      context: ./hybrid-runner
+      dockerfile: Dockerfile
+    command: python g1julia_mock.py
+    ports:
+      - "8080:8080"
+
+  hybrid-runner:
+    build:
+      context: ./hybrid-runner
+      dockerfile: Dockerfile
+    environment:
+      - SAAS_URL=http://saas-dashboard:3000
+    depends_on:
+      - saas-dashboard
+      - g1julia-mock
+
+  threat-transpiler:
+    build:
+      context: ./threat-transpiler
+      dockerfile: Dockerfile
+    ports:
+      - "5005:5005"
