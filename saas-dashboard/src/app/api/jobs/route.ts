@@ -40,7 +40,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { targetId, tests } = body;
+    const { targetId, tests, seed } = body;
 
     if (!targetId) {
       return NextResponse.json({ error: "Missing targetId" }, { status: 400 });
@@ -63,6 +63,11 @@ export async function POST(request: Request) {
       }
     }
 
+    const parsedSeed =
+      seed !== undefined && seed !== null && seed !== "" && !Number.isNaN(Number(seed))
+        ? Number(seed)
+        : undefined;
+
     const newJob: Job = {
       id: "job-" + crypto.randomUUID().substring(0, 8),
       status: "pending",
@@ -70,7 +75,9 @@ export async function POST(request: Request) {
       tests: tests || {},
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      custom_datasets
+      custom_datasets,
+      ...(parsedSeed !== undefined ? { seed: parsedSeed } : {}),
+      live_events: []
     };
     (newJob as any).promptfoo_config = db.promptfoo_config || "";
     (newJob as any).garak_config = db.garak_config || "";

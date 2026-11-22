@@ -8,11 +8,22 @@ export interface Target {
   id: string;
   name: string;
   endpoint: string;
-  adapter_type: "openai" | "anthropic" | "custom";
+  adapter_type: "openai" | "anthropic" | "custom" | "a2a" | "python";
   model_name: string;
   headers: Record<string, string>;
   request_template?: string;
   response_selector?: string;
+  python_entrypoint_file?: string;
+}
+
+export interface LiveEvent {
+  suite?: string;
+  turn?: number;
+  role?: string;
+  content?: string;
+  prompt?: string;
+  response?: string;
+  timestamp?: string;
 }
 
 export interface Job {
@@ -27,6 +38,8 @@ export interface Job {
   custom_datasets?: Record<string, string[]>;
   progress?: number;
   progress_text?: string;
+  seed?: number;
+  live_events?: LiveEvent[];
   promptfoo_config?: string;
   garak_config?: string;
   beavertails_config?: string;

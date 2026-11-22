@@ -6,8 +6,10 @@ import logging
 import subprocess
 import os
 import glob
+import random
 import yaml
 from adapters import get_adapter
+from risk_scoring import enrich_job_report
 
 # Conditional imports for PyRIT and DeepEval to avoid dependencies issues in lightweight environments
 try:
@@ -746,11 +748,9 @@ def execute_job(job):
             })
 
     logger.info(f"Job {job_id} finished. Stats: {stats}")
-    return {
-        "status": "completed",
-        "stats": stats,
-        "logs": test_logs
-    }
+    enriched = enrich_job_report(test_logs, stats)
+    enriched["seed"] = job.get("seed")
+    return enriched
 
 def main():
     logger.info(f"Starting Hybrid Red Teaming Agent [ID: {RUNNER_ID}]")

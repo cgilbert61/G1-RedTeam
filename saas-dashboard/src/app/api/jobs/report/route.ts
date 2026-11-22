@@ -113,6 +113,9 @@ export async function POST(request: Request) {
     job.report = {
       stats: report.stats || { total_cases: 0, failed_cases: 0, passed_cases: 0, vulnerabilities_detected: 0 },
       logs: report.logs || [],
+      system_risk_score: report.system_risk_score || null,
+      compliance_matrix: report.compliance_matrix || null,
+      ...(report.seed !== undefined ? { seed: report.seed } : {}),
       completed_at: new Date().toISOString()
     };
     if (runner_id) {

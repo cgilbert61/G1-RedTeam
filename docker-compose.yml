@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     command: python g1julia_mock.py
     ports:
-      - "8080:8080"
+      - "8088:8080"
 
   hybrid-runner:
     build:
@@ -28,6 +28,8 @@ services:
       dockerfile: Dockerfile
     environment:
       - SAAS_URL=http://saas-dashboard:3000
+    volumes:
+      - ./onprem-trial/agent-code/license.json:/app/license.json:ro
     depends_on:
       - saas-dashboard
       - g1julia-mock

@@ -12,9 +12,9 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { id, name, endpoint, adapter_type, model_name, headers, request_template, response_selector } = body;
+    const { id, name, endpoint, adapter_type, model_name, headers, request_template, response_selector, python_entrypoint_file } = body;
 
-    if (!name || !endpoint || !adapter_type) {
+    if (!name || (!endpoint && !python_entrypoint_file) || !adapter_type) {
       return NextResponse.json({ error: "Missing required fields (name, endpoint, adapter_type)" }, { status: 400 });
     }
 
@@ -28,23 +28,25 @@ export async function POST(request: Request) {
     if (target) {
       // Update
       target.name = name;
-      target.endpoint = endpoint;
+      target.endpoint = endpoint || python_entrypoint_file || "";
       target.adapter_type = adapter_type;
       target.model_name = model_name || "";
       target.headers = headers || {};
       target.request_template = request_template;
       target.response_selector = response_selector;
+      target.python_entrypoint_file = python_entrypoint_file;
     } else {
       // Add
       const newTarget: Target = {
         id: id || "target-" + crypto.randomUUID().substring(0, 8),
         name,
-        endpoint,
+        endpoint: endpoint || python_entrypoint_file || "",
         adapter_type,
         model_name: model_name || "",
         headers: headers || {},
         request_template,
-        response_selector
+        response_selector,
+        python_entrypoint_file
       };
       db.targets.push(newTarget);
     }

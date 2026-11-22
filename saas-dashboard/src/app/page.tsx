@@ -2,16 +2,20 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import * as yaml from "js-yaml";
+import { RiskCompliancePanel } from "@/components/RiskCompliancePanel";
+import { LiveTurnStreamPanel } from "@/components/LiveTurnStreamPanel";
+import { PolicyScenarioGeneratorTab } from "@/components/PolicyScenarioGeneratorTab";
 
 interface Target {
   id: string;
   name: string;
   endpoint: string;
-  adapter_type: "openai" | "anthropic" | "custom";
+  adapter_type: "openai" | "anthropic" | "custom" | "a2a" | "python";
   model_name: string;
   headers: Record<string, string>;
   request_template?: string;
   response_selector?: string;
+  python_entrypoint_file?: string;
 }
 
 interface Job {
@@ -22,6 +26,16 @@ interface Job {
   runner_id?: string;
   created_at: string;
   updated_at: string;
+  seed?: number;
+  live_events?: Array<{
+    suite?: string;
+    turn?: number;
+    role?: string;
+    content?: string;
+    prompt?: string;
+    response?: string;
+    timestamp?: string;
+  }>;
   report?: {
     stats: {
       total_cases: number;
@@ -29,6 +43,9 @@ interface Job {
       passed_cases: number;
       vulnerabilities_detected: number;
     };
+    system_risk_score?: any;
+    compliance_matrix?: Record<string, any>;
+    seed?: number;
     logs: Array<{
       suite: string;
       case_id: string;
@@ -36,6 +53,9 @@ interface Job {
       response: string;
       passed: boolean;
       vulnerability_type: string | null;
+      vulnerability_id?: string;
+      risk_score?: number;
+      severity?: string;
       turns?: Array<{ role: string; content: string }>;
       metrics?: Record<string, number>;
       tool_calls?: Array<{ name: string; arguments: any; result: string; allowed: boolean }>;
@@ -47,7 +67,33 @@ interface Job {
 }
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"dashboard" | "targets" | "scans" | "schedules" | "licensing" | "promptfoo" | "garak" | "datasets" | "pyrit" | "deepeval" | "mcp" | "transpiler">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "targets" | "scans" | "schedules" | "licensing" | "promptfoo" | "garak" | "datasets" | "pyrit" | "deepeval" | "mcp" | "transpiler" | "scenarios">("dashboard");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem("g1-redteam-theme");
+      if (saved === "light" || saved === "dark") {
+        setTheme(saved);
+        document.documentElement.setAttribute("data-theme", saved);
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    } catch {
+      // ignore storage errors
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const next: "dark" | "light" = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
+    try {
+      window.localStorage.setItem("g1-redteam-theme", next);
+    } catch {
+      // ignore storage errors
+    }
+  };
   
   // Data State
   const [targets, setTargets] = useState<Target[]>([]);
@@ -73,12 +119,14 @@ export default function Home() {
   // Targets Form State
   const [targetName, setTargetName] = useState("");
   const [targetEndpoint, setTargetEndpoint] = useState("");
-  const [targetAdapter, setTargetAdapter] = useState<"openai" | "anthropic" | "custom">("openai");
+  const [targetAdapter, setTargetAdapter] = useState<"openai" | "anthropic" | "custom" | "a2a" | "python">("openai");
   const [targetModel, setTargetModel] = useState("");
   const [targetHeaders, setTargetHeaders] = useState('{"Authorization": "Bearer key-here"}');
   const [reqTemplate, setReqTemplate] = useState('{"prompt": "{{PROMPT}}"}');
   const [resSelector, setResSelector] = useState("response");
+  const [targetPythonFile, setTargetPythonFile] = useState("");
   const [editingTargetId, setEditingTargetId] = useState<string | null>(null);
+  const [scanSeed, setScanSeed] = useState<string>("");
 
   // Custom Datasets Form State
   const [datasetName, setDatasetName] = useState("");
@@ -1087,6 +1135,56 @@ export default function Home() {
           </div>
         </div>
 
+        <div class="section-title">Unified 0–10 System Risk Score &amp; 8-Framework Compliance Matrix</div>
+        ${
+          job.report?.system_risk_score
+            ? `<div style="border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 16px; background: #f8fafc;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div>
+                    <div style="font-size: 10px; text-transform: uppercase; color: #64748b; font-weight: bold;">Unified System Risk Score</div>
+                    <div style="font-size: 24px; font-weight: bold; color: ${job.report.system_risk_score.score >= 8 ? "#b91c1c" : job.report.system_risk_score.score >= 6 ? "#c2410c" : job.report.system_risk_score.score >= 3 ? "#b45309" : "#047857"};">
+                      ${Number(job.report.system_risk_score.score).toFixed(2)} / 10.00 (${String(job.report.system_risk_score.severity || "low").toUpperCase()})
+                    </div>
+                  </div>
+                  <div style="font-size: 11px; text-align: right; color: #334155;">
+                    Critical: <strong>${job.report.system_risk_score.severity_breakdown?.critical ?? 0}</strong> |
+                    High: <strong>${job.report.system_risk_score.severity_breakdown?.high ?? 0}</strong> |
+                    Medium: <strong>${job.report.system_risk_score.severity_breakdown?.medium ?? 0}</strong> |
+                    Low: <strong>${job.report.system_risk_score.severity_breakdown?.low ?? 0}</strong><br/>
+                    Attack Success Rate: <strong>${((job.report.system_risk_score.attack_success_rate ?? 0) * 100).toFixed(1)}%</strong>
+                    ${job.report.system_risk_score.multi_critical_penalty > 0 ? ` | Multi-Critical Penalty: <strong>+${job.report.system_risk_score.multi_critical_penalty}</strong>` : ""}
+                  </div>
+                </div>
+              </div>`
+            : ""
+        }
+        ${
+          job.report?.compliance_matrix
+            ? `<table class="compliance-table" style="width: 100%; border-collapse: collapse; font-size: 10.5px; margin-bottom: 24px;">
+                <thead>
+                  <tr style="background: #0f172a; color: #fff;">
+                    <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: left;">Compliance Framework</th>
+                    <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;">Status</th>
+                    <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: center;">Compliance Rate</th>
+                    <th style="padding: 8px; border: 1px solid #cbd5e1; text-align: left;">Failed Controls</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${Object.values(job.report.compliance_matrix)
+                    .map(
+                      (fw: any) => `<tr>
+                        <td style="padding: 7px; border: 1px solid #cbd5e1;"><strong>${fw.name}</strong></td>
+                        <td style="padding: 7px; border: 1px solid #cbd5e1; text-align: center; font-weight: bold; color: ${fw.status === "pass" ? "#047857" : fw.status === "fail" ? "#b91c1c" : "#64748b"};">${String(fw.status).toUpperCase()}</td>
+                        <td style="padding: 7px; border: 1px solid #cbd5e1; text-align: center;">${fw.compliance_rate}% (${fw.passed_cases}/${fw.total_cases})</td>
+                        <td style="padding: 7px; border: 1px solid #cbd5e1;">${(fw.failed_controls || []).join(", ") || "None"}</td>
+                      </tr>`
+                    )
+                    .join("")}
+                </tbody>
+              </table>`
+            : ""
+        }
+
         <div class="section-title">Audit Execution Logs (Detailed Traces)</div>
         <div style="margin-top: 20px;">
           ${logsHtml}
@@ -1620,12 +1718,13 @@ export default function Home() {
         body: JSON.stringify({
           id: editingTargetId || undefined,
           name: targetName,
-          endpoint: targetEndpoint,
+          endpoint: targetAdapter === "python" ? (targetPythonFile || targetEndpoint) : targetEndpoint,
           adapter_type: targetAdapter,
           model_name: targetModel,
           headers: parsedHeaders,
           request_template: targetAdapter === "custom" ? reqTemplate : undefined,
           response_selector: targetAdapter === "custom" ? resSelector : undefined,
+          python_entrypoint_file: targetAdapter === "python" ? (targetPythonFile || targetEndpoint) : undefined,
         }),
       });
 
@@ -1638,6 +1737,7 @@ export default function Home() {
         setTargetHeaders('{"Authorization": "Bearer key-here"}');
         setReqTemplate('{"prompt": "{{PROMPT}}"}');
         setResSelector("response");
+        setTargetPythonFile("");
         setEditingTargetId(null);
         fetchTargets();
       }
@@ -1649,14 +1749,18 @@ export default function Home() {
   // Populate form for editing target
   const handleEditTarget = (target: Target) => {
     setEditingTargetId(target.id);
-    setTargetName(target.name);
-    setTargetEndpoint(target.endpoint);
-    setTargetAdapter(target.adapter_type);
-    setTargetModel(target.model_name);
-    setTargetHeaders(JSON.stringify(target.headers, null, 2));
+    setTargetName(target.name || "");
+    setTargetEndpoint(target.endpoint || "");
+    setTargetAdapter(target.adapter_type || "openai");
+    setTargetModel(target.model_name || "");
+    setTargetHeaders(JSON.stringify(target.headers || {}, null, 2));
     setReqTemplate(target.request_template || '{"prompt": "{{PROMPT}}"}');
     setResSelector(target.response_selector || "response");
+    setTargetPythonFile(target.python_entrypoint_file || "");
     setActiveTab("targets");
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   // Launch a new Red Team Scan
@@ -1672,6 +1776,7 @@ export default function Home() {
         body: JSON.stringify({
           targetId: selectedTargetId,
           tests: selectedTests,
+          ...(scanSeed.trim() !== "" ? { seed: Number(scanSeed) } : {}),
         }),
       });
       if (res.ok) {
@@ -1854,46 +1959,12 @@ export default function Home() {
       {/* Header bar */}
       <header className="border-b border-slate-900 bg-slate-950/70 backdrop-blur-md sticky top-0 z-40 px-6 py-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div className="relative w-10 h-10 flex items-center justify-center">
-            <svg viewBox="0 0 100 100" className="w-full h-full filter drop-shadow-[0_0_6px_rgba(239,68,68,0.3)]">
-              <defs>
-                <linearGradient id="aggregator-shield" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#fecdd3"/>
-                  <stop offset="50%" stopColor="#f43f5e"/>
-                  <stop offset="100%" stopColor="#881337"/>
-                </linearGradient>
-                <linearGradient id="aggregator-g" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#e11d48"/>
-                  <stop offset="100%" stopColor="#9f1239"/>
-                </linearGradient>
-                <linearGradient id="aggregator-one" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#ffe4e6"/>
-                  <stop offset="100%" stopColor="#fda4af"/>
-                </linearGradient>
-                <radialGradient id="aggregator-glow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.2"/>
-                  <stop offset="100%" stopColor="#0f172a" stopOpacity="0"/>
-                </radialGradient>
-              </defs>
-              <circle cx="50" cy="50" r="45" fill="url(#aggregator-glow)"/>
-              <path d="M 50 18 A 28 28 0 1 0 78 50 L 78 46 L 56 46 L 56 54 L 69 54 A 19 19 0 1 1 50 27" fill="url(#aggregator-g)" stroke="#9f1239" strokeWidth="0.5"/>
-              <path d="M 45 32 L 53 32 L 53 66 L 45 66 Z" fill="url(#aggregator-one)" stroke="#9f1239" strokeWidth="0.5"/>
-              <path d="M 45 32 L 37 38 L 41 43 L 45 38 Z" fill="url(#aggregator-one)" stroke="#9f1239" strokeWidth="0.5"/>
-              <polygon points="50,12 80,26 80,62 50,88 20,62 20,26" fill="none" stroke="url(#aggregator-shield)" strokeWidth="2.5" strokeLinejoin="round"/>
-              <polygon points="50,15 77,28 77,60 50,84 23,60 23,28" fill="none" stroke="url(#aggregator-shield)" strokeWidth="1" strokeLinejoin="round" strokeOpacity="0.5"/>
-              <line x1="50" y1="12" x2="50" y2="22" stroke="url(#aggregator-shield)" strokeWidth="2"/>
-              <line x1="20" y1="26" x2="32" y2="32" stroke="url(#aggregator-shield)" strokeWidth="2"/>
-              <line x1="80" y1="26" x2="68" y2="32" stroke="url(#aggregator-shield)" strokeWidth="2"/>
-              <line x1="20" y1="62" x2="32" y2="56" stroke="url(#aggregator-shield)" strokeWidth="2"/>
-              <line x1="80" y1="62" x2="68" y2="56" stroke="url(#aggregator-shield)" strokeWidth="2"/>
-              <line x1="50" y1="88" x2="50" y2="76" stroke="url(#aggregator-shield)" strokeWidth="2"/>
-              <circle cx="50" cy="12" r="3.5" fill="#ffe4e6" stroke="#9f1239" strokeWidth="1"/>
-              <circle cx="80" cy="26" r="3.5" fill="#f43f5e" stroke="#9f1239" strokeWidth="1"/>
-              <circle cx="80" cy="62" r="3.5" fill="#f43f5e" stroke="#9f1239" strokeWidth="1"/>
-              <circle cx="50" cy="88" r="3.5" fill="#9f1239" stroke="#ffe4e6" strokeWidth="1"/>
-              <circle cx="20" cy="62" r="3.5" fill="#f43f5e" stroke="#9f1239" strokeWidth="1"/>
-              <circle cx="20" cy="26" r="3.5" fill="#ffe4e6" stroke="#9f1239" strokeWidth="1"/>
-            </svg>
+          <div className="relative w-10 h-10 flex items-center justify-center shrink-0">
+            <img
+              src="/g1_logo.jpg"
+              alt="G1163RT Logo"
+              className="w-10 h-10 rounded-lg object-cover border border-slate-700/60 shadow-sm bg-white"
+            />
           </div>
           <div>
             <h1 className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
@@ -1903,8 +1974,32 @@ export default function Home() {
           </div>
         </div>
 
-        {/* System Health / Runner Badge */}
-        <div className="flex items-center gap-6">
+        {/* System Health / Runner Badge + Theme Toggle */}
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label="Toggle Light/Dark Mode"
+            title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            className="flex items-center gap-2 bg-slate-900/80 hover:bg-slate-800/80 border border-slate-700/80 px-3 py-1.5 rounded-full text-xs font-medium text-slate-200 transition cursor-pointer shadow-sm"
+          >
+            {theme === "dark" ? (
+              <>
+                <svg className="w-3.5 h-3.5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>Light Mode</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-3.5 h-3.5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+                <span>Dark Mode</span>
+              </>
+            )}
+          </button>
+
           <div className="flex items-center gap-2 bg-slate-900/60 border border-slate-800 px-3 py-1.5 rounded-full text-xs">
             <span className={`w-2.5 h-2.5 rounded-full ${jobs.some(j => j.status === "running") ? "bg-cyan-400 animate-ping" : "bg-emerald-500"}`}></span>
             <span className="text-slate-400 font-medium">Local Runner Agent:</span>
@@ -2027,6 +2122,16 @@ export default function Home() {
                 Licensing & Agents
               </button>
             )}
+            <button
+              onClick={() => setActiveTab("scenarios")}
+              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${
+                activeTab === "scenarios"
+                  ? "bg-gradient-to-r from-cyan-600 to-cyan-500 text-white shadow-md shadow-cyan-500/10"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              Policy Scenarios
+            </button>
             <button
               onClick={() => setActiveTab("transpiler")}
               className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${
@@ -2532,11 +2637,11 @@ export default function Home() {
                       <div className="space-y-1.5">
                         <label className="text-slate-400">API Endpoint URL</label>
                         <input
-                          type="url"
+                          type={targetAdapter === "python" ? "text" : "url"}
                           required
                           value={targetEndpoint}
                           onChange={(e) => setTargetEndpoint(e.target.value)}
-                          placeholder="http://localhost:8080/v1/chat"
+                          placeholder={targetAdapter === "python" ? "/app/my_agent.py" : targetAdapter === "a2a" ? "http://localhost:10001/" : "http://localhost:8080/v1/chat"}
                           className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500 font-sans"
                         />
                       </div>
@@ -2551,8 +2656,23 @@ export default function Home() {
                           <option value="openai">OpenAI compatible (v1/chat/completions)</option>
                           <option value="anthropic">Anthropic Messages Format</option>
                           <option value="custom">Custom Webhook / Custom Payload (JSON template)</option>
+                          <option value="a2a">A2A (Google Agent-to-Agent JSON-RPC)</option>
+                          <option value="python">Python Entrypoint (local call_agent module)</option>
                         </select>
                       </div>
+
+                      {targetAdapter === "python" && (
+                        <div className="space-y-1.5">
+                          <label className="text-slate-400">Python Entrypoint File Path (call_agent)</label>
+                          <input
+                            type="text"
+                            value={targetPythonFile}
+                            onChange={(e) => setTargetPythonFile(e.target.value)}
+                            placeholder="/app/agents/my_agent.py"
+                            className="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-cyan-500 font-mono text-xs"
+                          />
+                        </div>
+                      )}
 
                       <div className="space-y-1.5">
                         <label className="text-slate-400">Model Name Target</label>
@@ -2996,8 +3116,21 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Big Action Launch Trigger */}
-                <div className="pt-4">
+                {/* Deterministic Reproducibility Seed + Big Action Launch Trigger */}
+                <div className="pt-4 space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/50 px-4 py-3">
+                    <div>
+                      <div className="text-xs font-semibold text-slate-200">Deterministic Regression Seed (Optional)</div>
+                      <div className="text-[11px] text-slate-500">Pin dataset sampling, mutators, Garak, and PyRIT to an exact seed for reproducible runs.</div>
+                    </div>
+                    <input
+                      type="number"
+                      value={scanSeed}
+                      onChange={(e) => setScanSeed(e.target.value)}
+                      placeholder="e.g. 42"
+                      className="w-36 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-mono text-cyan-300 focus:outline-none focus:border-cyan-500"
+                    />
+                  </div>
                   <button
                     onClick={handleLaunchScan}
                     className="w-full py-4 rounded-xl bg-gradient-to-r from-cyan-500 via-cyan-600 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white font-bold tracking-wider text-sm transition shadow-lg shadow-cyan-500/20 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
@@ -4245,6 +4378,12 @@ export default function Home() {
               </div>
             )}
 
+            {activeTab === "scenarios" && (
+              <div className="animate-fadeIn">
+                <PolicyScenarioGeneratorTab />
+              </div>
+            )}
+
             {activeTab === "transpiler" && (
               <div className="space-y-6 animate-fadeIn">
                 <div className="flex justify-between items-center border-b border-slate-900 pb-4">
@@ -4599,6 +4738,14 @@ export default function Home() {
 
             {/* Modal Body */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              <LiveTurnStreamPanel
+                jobId={selectedJob.id}
+                status={selectedJob.status}
+                initialEvents={selectedJob.live_events || []}
+              />
+              {selectedJob.report && (
+                <RiskCompliancePanel report={selectedJob.report} seed={selectedJob.seed} />
+              )}
               {/* If running or pending, show progress */}
               {(selectedJob.status === "pending" || selectedJob.status === "running") && (
                 <div className="flex flex-col items-center justify-center py-12 gap-6 text-center max-w-md mx-auto">

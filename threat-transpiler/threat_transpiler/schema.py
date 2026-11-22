@@ -1,4 +1,4 @@
-from typing import List, Dict, Union, Any
+from typing import List, Dict, Union, Any, Optional
 from pydantic import BaseModel, Field, field_validator
 
 class IRPayload(BaseModel):
@@ -7,6 +7,10 @@ class IRPayload(BaseModel):
     """
     threat_id: str = Field(description="Unique identifier for the threat signature.")
     category: str = Field(description="The threat category, e.g., 'jailbreak', 'smuggling', 'hate_speech'.")
+    vulnerability_id: Optional[str] = Field(
+        default=None,
+        description="Optional canonical VulnerabilityId for 8-framework compliance mapping.",
+    )
     canonical_text: str = Field(description="The normalized and canonicalized text of the threat.")
     tokens: List[str] = Field(default_factory=list, description="Extracted token sequences of interest.")
     centroids: List[float] = Field(default_factory=list, description="Semantic embedding centroid vector coordinates.")

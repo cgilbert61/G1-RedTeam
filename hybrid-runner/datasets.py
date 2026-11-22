@@ -1,5 +1,6 @@
 import os
 import json
+import random
 
 BASE_DATASETS = {
     "Shomi28": [
@@ -111,7 +112,7 @@ JAILBREAKBENCH_CATEGORIZED = {
     ]
 }
 
-def get_active_datasets(beavertails_config=None, jailbreakbench_config=None):
+def get_active_datasets(beavertails_config=None, jailbreakbench_config=None, seed=None):
     datasets_copy = {k: list(v) for k, v in BASE_DATASETS.items()}
     
     # 1. Process PKU BeaverTails
@@ -159,10 +160,17 @@ def get_active_datasets(beavertails_config=None, jailbreakbench_config=None):
                 new_prompts = intel_data.get("new_prompts", {})
                 for dataset_name, prompts in new_prompts.items():
                     if dataset_name in datasets_copy:
-                        datasets_copy[dataset_name] = list(set(datasets_copy[dataset_name] + prompts))
+                        datasets_copy[dataset_name] = sorted(set(datasets_copy[dataset_name] + prompts))
                     else:
-                        datasets_copy[dataset_name] = prompts
+                        datasets_copy[dataset_name] = list(prompts)
         except Exception:
             pass
-            
+
+    if seed is not None:
+        rng = random.Random(int(seed))
+        for ds_name in sorted(datasets_copy.keys()):
+            items = list(datasets_copy[ds_name])
+            rng.shuffle(items)
+            datasets_copy[ds_name] = items
+
     return datasets_copy
